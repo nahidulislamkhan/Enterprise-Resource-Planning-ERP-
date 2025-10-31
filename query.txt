@@ -1,0 +1,36 @@
+-- database: :memory:
+DROP TABLE IF EXISTS clients;
+
+DROP TABLE IF EXISTS properties;
+
+CREATE TABLE
+    properties (
+        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        name TEXT NOT NULL,
+        price TEXT NOT NULL,
+        location TEXT NOT NULL,
+        type TEXT NOT NULL,
+        size TEXT,
+        status TEXT NOT NULL DEFAULT 'Available',
+        owner_id INTEGER,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+CREATE TABLE
+    clients (
+        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        name TEXT NOT NULL,
+        contact_info TEXT NOT NULL,
+        interested_property INTEGER,
+        type TEXT NOT NULL, -- Buyer, Tenant, Investor
+        status TEXT NOT NULL DEFAULT 'Active',
+        FOREIGN KEY (interested_property) REFERENCES properties (id) ON DELETE SET NULL
+    );
+
+
+INSERT INTO properties (name, price, location, type, size) VALUES ('House in City Centre', '500000', 'City Centre', 'House', '1000 sqft');
+INSERT INTO properties (name, price, location, type, size) VALUES ('Apartment in Suburbs', '300000', 'Suburbs', 'Apartment', '500 sqft');
+INSERT INTO properties (name, price, location, type, size) VALUES ('Office Space', '1000000', 'City Centre', 'Office', '5000 sqft');
+
+INSERT INTO clients (name, contact_info, interested_property, type) VALUES ('John', 'john@example.com', 1, 'Buyer');
+INSERT INTO clients (name, contact_info, interested_property, type) VALUES ('Jane', 'jane@example.com', 2, 'Tenant');
